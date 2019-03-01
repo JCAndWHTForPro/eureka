@@ -23,32 +23,10 @@ import com.google.inject.ImplementedBy;
 import com.netflix.discovery.shared.transport.EurekaTransportConfig;
 
 /**
- * Configuration information required by the eureka clients to register an
- * instance with <em>Eureka</em> server.
- *
- * <p>
- * Most of the required information is provided by the default configuration
- * {@link DefaultEurekaClientConfig}. The users just need to provide the eureka
- * server service urls. The Eureka server service urls can be configured by 2
- * mechanisms
- *
- * 1) By registering the information in the DNS. 2) By specifying it in the
- * configuration.
- * </p>
  *
  *
- * Once the client is registered, users can look up information from
- * {@link EurekaClient} based on <em>virtual hostname</em> (also called
- * VIPAddress), the most common way of doing it or by other means to get the
- * information necessary to talk to other instances registered with
- * <em>Eureka</em>.
- *
- * <p>
- * Note that all configurations are not effective at runtime unless and
- * otherwise specified.
- * </p>
- *
- * @author Karthik Ranganathan
+ * 重在 Eureka-Client，
+ * 例如， 连接的 Eureka-Server 的地址、获取服务提供者列表的频率、注册自身为服务提供者的频率等等。
  *
  */
 @ImplementedBy(DefaultEurekaClientConfig.class)

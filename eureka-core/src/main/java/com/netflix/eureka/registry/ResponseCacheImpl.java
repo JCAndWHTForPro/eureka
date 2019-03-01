@@ -112,8 +112,9 @@ public class ResponseCacheImpl implements ResponseCache {
                 }
             });
 
+    // 只读缓存
     private final ConcurrentMap<Key, Value> readOnlyCacheMap = new ConcurrentHashMap<Key, Value>();
-
+    // 固定过期 + 固定大小的读写缓存
     private final LoadingCache<Key, Value> readWriteCacheMap;
     private final boolean shouldUseReadOnlyResponseCache;
     private final AbstractInstanceRegistry registry;
@@ -202,8 +203,11 @@ public class ResponseCacheImpl implements ResponseCache {
      *
      * @param key the key for which the cached information needs to be obtained.
      * @return payload which contains information about the applications.
+     *
+     * jicheng 拉取实例的缓存入口方法
      */
     public String get(final Key key) {
+        //shouldUseReadOnlyResponseCache可配置，默认true，是否使用只读缓存
         return get(key, shouldUseReadOnlyResponseCache);
     }
 
@@ -344,7 +348,9 @@ public class ResponseCacheImpl implements ResponseCache {
     Value getValue(final Key key, boolean useReadOnlyCache) {
         Value payload = null;
         try {
+
             if (useReadOnlyCache) {
+
                 final Value currentPayload = readOnlyCacheMap.get(key);
                 if (currentPayload != null) {
                     payload = currentPayload;
@@ -353,6 +359,7 @@ public class ResponseCacheImpl implements ResponseCache {
                     readOnlyCacheMap.put(key, payload);
                 }
             } else {
+                // 不使用只读缓存的话，会增强一致性
                 payload = readWriteCacheMap.get(key);
             }
         } catch (Throwable t) {

@@ -50,6 +50,8 @@ import com.netflix.eureka.util.EurekaMonitors;
  *
  * @author Karthik Ranganathan, Greg Kim
  *
+ * jicheng 此类是server端处理所有请求的controller
+ *
  */
 @Path("/{version}/apps")
 @Produces({"application/xml", "application/json"})
@@ -108,6 +110,10 @@ public class ApplicationsResource {
      *
      * @return a response containing information about all {@link com.netflix.discovery.shared.Applications}
      *         from the {@link AbstractInstanceRegistry}.
+     *
+     * jicheng （核心） 这个就是拉取注册信息的server端接口入口
+     *
+     * 接收全量获取请求
      */
     @GET
     public Response getContainers(@PathParam("version") String version,
@@ -130,10 +136,16 @@ public class ApplicationsResource {
         // Check if the server allows the access to the registry. The server can
         // restrict access if it is not
         // ready to serve traffic depending on various reasons.
+        // 判断是否可以访问
+        // Eureka-Server 启动完成，但是未处于就绪( Ready )状态，
+        // 不接受请求全量应用注册信息的请求，
+        // 例如，Eureka-Server 启动时，未能从其他 Eureka-Server 集群的节点获取到应用注册信息。
         if (!registry.shouldAllowAccess(isRemoteRegionRequested)) {
             return Response.status(Status.FORBIDDEN).build();
         }
         CurrentRequestVersion.set(Version.toEnum(version));
+
+        // 设置返回数据格式，默认 JSON
         KeyType keyType = Key.KeyType.JSON;
         String returnMediaType = MediaType.APPLICATION_JSON;
         if (acceptHeader == null || !acceptHeader.contains(HEADER_JSON_VALUE)) {
@@ -141,6 +153,7 @@ public class ApplicationsResource {
             returnMediaType = MediaType.APPLICATION_XML;
         }
 
+        // 创建响应缓存( ResponseCache ) 的键( KEY )
         Key cacheKey = new Key(Key.EntityType.Application,
                 ResponseCacheImpl.ALL_APPS,
                 keyType, CurrentRequestVersion.get(), EurekaAccept.fromString(eurekaAccept), regions
@@ -153,6 +166,7 @@ public class ApplicationsResource {
                     .header(HEADER_CONTENT_TYPE, returnMediaType)
                     .build();
         } else {
+            // 默认走这个分支
             response = Response.ok(responseCache.get(cacheKey))
                     .build();
         }

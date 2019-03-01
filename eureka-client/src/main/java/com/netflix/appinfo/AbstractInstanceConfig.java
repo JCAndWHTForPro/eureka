@@ -32,6 +32,8 @@ import org.slf4j.LoggerFactory;
  *
  * @author Karthik Ranganathan
  *
+ * jicheng Eureka 应用实例配置抽象基类，主要实现一些相对通用的配置
+ *
  */
 public abstract class AbstractInstanceConfig implements EurekaInstanceConfig {
     private static final Logger logger = LoggerFactory.getLogger(AbstractInstanceConfig.class);

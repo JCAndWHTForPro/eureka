@@ -47,6 +47,8 @@ import static com.netflix.appinfo.PropertyBasedInstanceConfigConstants.*;
  *
  * @author Karthik Ranganathan
  *
+ * jicheng 基于配置文件的 Eureka 应用实例配置抽象基类
+ *
  */
 public abstract class PropertiesInstanceConfig extends AbstractInstanceConfig implements EurekaInstanceConfig {
 

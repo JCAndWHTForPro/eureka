@@ -314,6 +314,13 @@ public class InstanceInfo {
     }
 
 
+    /**
+     * 具体一个实例，就是有这些个状态，都写成了enum
+     * 很好，很好！
+     * @ClassName:      InstanceInfo
+     * @Author:         jicheng
+     * @CreateDate:     2019/3/1 下午11:25
+     */
     public enum InstanceStatus {
         UP, // Ready to receive traffic
         DOWN, // Do not send traffic- healthcheck callback failed

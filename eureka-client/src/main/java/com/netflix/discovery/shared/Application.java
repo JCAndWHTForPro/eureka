@@ -208,6 +208,7 @@ public class Application {
                 instanceRegionChecker);
     }
 
+    // jicheng 这里相信遍历所有拉取的实例
     private void _shuffleAndStoreInstances(boolean filterUpInstances, boolean indexByRemoteRegions,
                                            @Nullable Map<String, Applications> remoteRegionsRegistry,
                                            @Nullable EurekaClientConfig clientConfig,
@@ -248,6 +249,7 @@ public class Application {
             }
 
         }
+        // JDK竟然还有这个方法：打乱一个list
         Collections.shuffle(instanceInfoList, shuffleRandom);
         this.shuffledInstances.set(instanceInfoList);
     }

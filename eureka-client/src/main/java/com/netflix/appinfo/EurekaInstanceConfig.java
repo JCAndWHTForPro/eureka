@@ -20,24 +20,11 @@ import java.util.Map;
 import com.google.inject.ImplementedBy;
 
 /**
- * Configuration information required by the instance to register with Eureka
- * server. Once registered, users can look up information from
- * {@link com.netflix.discovery.EurekaClient} based on virtual hostname (also called VIPAddress),
- * the most common way of doing it or by other means to get the information
- * necessary to talk to other instances registered with <em>Eureka</em>.
  *
- * <P>
- * As requirements of registration, an id and an appname must be supplied. The id should be
- * unique within the scope of the appname.
- * </P>
  *
- * <p>
- * Note that all configurations are not effective at runtime unless and
- * otherwise specified.
- * </p>
- *
- * @author Karthik Ranganathan
- *
+ * 重在应用实例，例如，应用名、应用的端口等等。
+ * 此处应用指的是，Application Consumer 和 Application Provider。
+ * 主要就是的硬性配置
  */
 @ImplementedBy(CloudInstanceConfig.class)
 public interface EurekaInstanceConfig {
@@ -108,18 +95,11 @@ public interface EurekaInstanceConfig {
     boolean getSecurePortEnabled();
 
     /**
-     * Indicates how often (in seconds) the eureka client needs to send
-     * heartbeats to eureka server to indicate that it is still alive. If the
-     * heartbeats are not received for the period specified in
-     * {@link #getLeaseExpirationDurationInSeconds()}, eureka server will remove
-     * the instance from its view, there by disallowing traffic to this
-     * instance.
      *
-     * <p>
-     * Note that the instance could still not take traffic if it implements
-     * {@link HealthCheckCallback} and then decides to make itself unavailable.
-     * </p>
-     *
+     * 租约续约频率，单位：秒。
+     * 应用不断通过按照该频率发送心跳给 Eureka-Server 以达到续约的作用。
+     * 当 Eureka-Server 超过最大频率未收到续约（心跳），契约失效，进行应用移除。
+     * 应用移除后，其他应用无法从 Eureka-Server 获取该应用
      * @return time in seconds
      */
     int getLeaseRenewalIntervalInSeconds();
@@ -137,6 +117,9 @@ public interface EurekaInstanceConfig {
      * the value specified in {@link #getLeaseRenewalIntervalInSeconds()}
      * .
      * </p>
+     *
+     * 这个是最大续约时间，超过这个时间，注册中心就认为这个
+     * client失效了，将进行保护或者移除操作
      *
      * @return value indicating time in seconds.
      */

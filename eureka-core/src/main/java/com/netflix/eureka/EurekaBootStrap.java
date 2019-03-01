@@ -106,6 +106,11 @@ public class EurekaBootStrap implements ServletContextListener {
      *
      * @see
      * javax.servlet.ServletContextListener#contextInitialized(javax.servlet.ServletContextEvent)
+     *
+     *
+     * 这里是整个注册中心的入口
+     * 在应用服务器启动的时候，eureka会是一个监听器（Listener）
+     * 应用服务器会调用com.netflix.eureka.EurekaBootStrap#contextInitialized这个方法
      */
     @Override
     public void contextInitialized(ServletContextEvent event) {

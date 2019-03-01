@@ -160,6 +160,11 @@ public abstract class AbstractJerseyEurekaHttpClient implements EurekaHttpClient
         }
     }
 
+    /**
+     * 使用jersey进行通信
+     * @param regions
+     * @return
+     */
     @Override
     public EurekaHttpResponse<Applications> getApplications(String... regions) {
         return getApplicationsInternal("apps/", regions);
@@ -180,17 +185,21 @@ public abstract class AbstractJerseyEurekaHttpClient implements EurekaHttpClient
         return getApplicationsInternal("svips/" + secureVipAddress, regions);
     }
 
+    // 请求服务实例的方法
     private EurekaHttpResponse<Applications> getApplicationsInternal(String urlPath, String[] regions) {
         ClientResponse response = null;
         String regionsParamValue = null;
         try {
             WebResource webResource = jerseyClient.resource(serviceUrl).path(urlPath);
             if (regions != null && regions.length > 0) {
+                // 这里用逗号,将每个region分开
                 regionsParamValue = StringUtil.join(regions);
                 webResource = webResource.queryParam("regions", regionsParamValue);
             }
             Builder requestBuilder = webResource.getRequestBuilder();
             addExtraHeaders(requestBuilder);
+            // GET 请求 Eureka-Server 的 apps/ 接口，
+            // 参数为 regions ，返回格式为 JSON ，实现全量获取注册信息
             response = requestBuilder.accept(MediaType.APPLICATION_JSON_TYPE).get(ClientResponse.class);
 
             Applications applications = null;

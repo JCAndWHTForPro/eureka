@@ -399,6 +399,8 @@ public class DefaultEurekaClientConfig implements EurekaClientConfig {
      *
      * @see
      * com.netflix.discovery.EurekaClientConfig#shouldFilterOnlyUpInstances()
+     *
+     * 是否过滤，只获取状态为开启( Up )的应用实例集合。
      */
     @Override
     public boolean shouldFilterOnlyUpInstances() {

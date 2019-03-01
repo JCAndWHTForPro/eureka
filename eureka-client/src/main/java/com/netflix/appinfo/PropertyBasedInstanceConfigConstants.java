@@ -4,6 +4,8 @@ package com.netflix.appinfo;
  * constants pertaining to property based instance configs
  *
  * @author David Liu
+ *
+ * 在具体配置文件的时候，每个属性都在这里了
  */
 final class PropertyBasedInstanceConfigConstants {
 
